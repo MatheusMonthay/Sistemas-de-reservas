@@ -83,16 +83,18 @@
         <h1>Sistemas de Reservas Salas e Recursos </h1>
 
         @if ($errors->any())
-        <div class="error-message">
-            @foreach ($errors->all() as $error)
-            <p>{{ $error }}</p>
-            @endforeach
+        <div>
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
         @endif
 
-        <form method="POST" action="#">
+        <form method="POST" action="{{ route('login') }}">
             @csrf
-            <input type="email" name="email" placeholder="Email" required autofocus>
+            <input type="email" name="login" placeholder="E-mail ou CPF" value="{{ old('login') }}" required autofocus>
             <input type="password" name="password" placeholder="Senha" required>
             <input type="submit" value="Entrar">
         </form>
