@@ -12,7 +12,8 @@
         align-items: center;
         height: 100vh;
         margin: 0;
-        background-color: #f2f2f2;
+        background-color: #bcd0e5;
+        /* Fundo azul claro */
         font-family: Arial, sans-serif;
     }
 
@@ -33,6 +34,8 @@
     .login-container h1 {
         font-size: 24px;
         margin-bottom: 20px;
+        color: #003366;
+        /* Azul escuro */
     }
 
     .login-container input[type="email"],
@@ -50,7 +53,8 @@
     }
 
     .login-container input[type="submit"] {
-        background-color: #000;
+        background-color: #003366;
+        /* Azul escuro */
         color: white;
         padding: 10px;
         border: none;
@@ -60,7 +64,8 @@
     }
 
     .login-container input[type="submit"]:hover {
-        background-color: #333;
+        background-color: #002244;
+        /* Azul mais escuro */
     }
 
     .login-container .reset-password {
@@ -71,10 +76,10 @@
     }
 
     .login-container .reset-password:hover {
-        color: #000;
+        color: #003366;
+        /* Azul escuro */
     }
     </style>
-
 </head>
 
 <body>
