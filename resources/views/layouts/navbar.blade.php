@@ -33,10 +33,6 @@
                         Olá, {{ auth()->user()->name }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
                         <li>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
