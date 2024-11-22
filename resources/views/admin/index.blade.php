@@ -46,10 +46,17 @@
                         <td>{{ $professor->email }}</td>
                         <td>{{ $professor->cpf }}</td>
                         <td>
-                            <button class="btn btn-warning btn-sm">Editar</button>
-                            <button class="btn btn-danger btn-sm">Excluir</button>
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#modalEditarProfessor-{{ $professor->id }}">Editar</button>
+                            <form action="{{ route('admin.professores.destroy', $professor->id) }}" method="POST"
+                                style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm" type="submit">Excluir</button>
+                            </form>
                         </td>
                     </tr>
+                    @include('admin.modais.modal_editar_professor', ['professor' => $professor])
                     @endforeach
                 </tbody>
             </table>
@@ -74,10 +81,17 @@
                         <td>{{ $ambiente->nome }}</td>
                         <td>{{ $ambiente->descricao }}</td>
                         <td>
-                            <button class="btn btn-warning btn-sm">Editar</button>
-                            <button class="btn btn-danger btn-sm">Excluir</button>
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#modalEditarAmbiente-{{ $ambiente->id }}">Editar</button>
+                            <form action="{{ route('admin.ambientes.destroy', $ambiente->id) }}" method="POST"
+                                style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm" type="submit">Excluir</button>
+                            </form>
                         </td>
                     </tr>
+                    @include('admin.modais.modal_editar_ambiente', ['ambiente' => $ambiente])
                     @endforeach
                 </tbody>
             </table>
@@ -104,10 +118,17 @@
                         <td>{{ $equipamento->descricao }}</td>
                         <td>{{ $equipamento->quantidade }}</td>
                         <td>
-                            <button class="btn btn-warning btn-sm">Editar</button>
-                            <button class="btn btn-danger btn-sm">Excluir</button>
+                            <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                data-bs-target="#modalEditarEquipamento-{{ $equipamento->id }}">Editar</button>
+                            <form action="{{ route('admin.equipamentos.destroy', $equipamento->id) }}" method="POST"
+                                style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm" type="submit">Excluir</button>
+                            </form>
                         </td>
                     </tr>
+                    @include('admin.modais.modal_editar_equipamento', ['equipamento' => $equipamento])
                     @endforeach
                 </tbody>
             </table>
@@ -115,108 +136,8 @@
     </div>
 </div>
 
-<!-- Modal para Cadastro de Professor -->
-<div class="modal fade" id="modalCadastrarProfessor" tabindex="-1" aria-labelledby="modalCadastrarProfessorLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form method="POST" action="{{ route('admin.professores.create') }}">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalCadastrarProfessorLabel">Cadastrar Professor</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Nome</label>
-                        <input type="text" class="form-control" id="name" name="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="cpf" class="form-label">CPF</label>
-                        <input type="text" class="form-control" id="cpf" name="cpf" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Senha</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Salvar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal para Cadastro de Ambiente -->
-<div class="modal fade" id="modalCadastroAmbiente" tabindex="-1" aria-labelledby="modalCadastroAmbienteLabel"
-    aria-hidden="true">
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ route('admin.ambientes.create') }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalCadastroAmbiente">Cadastrar Ambiente</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="nome" class="form-label">Nome do Ambiente</label>
-                        <input type="text" class="form-control" id="nome" name="nome" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="descricao" class="form-label">Descrição</label>
-                        <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Modal para Cadastro de Equipamento -->
-<div class="modal fade" id="modalCadastroEquipamento" tabindex="-1" aria-labelledby="modalCadastroEquipamentoLabel"
-    aria-hidden="true">
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ route('admin.equipamentos.create') }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalCadastroEquipamento">Cadastrar Equipamento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="nome" class="form-label">Nome do Equipamento</label>
-                        <input type="text" class="form-control" id="nome" name="nome" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="descricao" class="form-label">Descrição</label>
-                        <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="quantidade" class="form-label">Quantidade</label>
-                        <input type="number" class="form-control" id="quantidade" name="quantidade" min="1" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Cadastrar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+@include('admin.modais.modal_cadastrar_professor')
+@include('admin.modais.modal_cadastrar_ambiente')
+@include('admin.modais.modal_cadastrar_equipamento')
 
 @endsection

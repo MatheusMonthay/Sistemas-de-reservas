@@ -7,6 +7,7 @@
     <title>{{ $title ?? 'Sistema de Reservas de Salas' }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+
     <style>
     body {
         background-color: #f8f9fa;
@@ -25,6 +26,13 @@
         margin-top: 20px;
     }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#cpf').mask('000.000.000-00');
+    });
+    </script>
 </head>
 
 <body>
@@ -40,6 +48,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
