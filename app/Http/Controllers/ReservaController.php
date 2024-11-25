@@ -11,18 +11,44 @@ use Illuminate\Support\Facades\Auth;
 class ReservaController extends Controller
 {
     // Exibir todas as reservas
-    public function index()
+    public function index(Request $request)
     {
-        
-        $reservas = Reserva::with(['user', 'ambiente', 'equipamentos'])
+        $query = Reserva::with(['user', 'ambiente', 'equipamentos'])
             ->where('inicio', '>=', now()->startOfDay())
-            ->orderBy('inicio', 'asc') 
-            ->get();
-        $ambientes = Ambiente::all();
-        $equipamentos = Equipamento::all();
+            ->orderBy('inicio', 'asc');
     
-        return view('reserva.index', compact('reservas', 'ambientes', 'equipamentos'));
+        // Filtros
+        if ($request->has('ambiente_id') && $request->ambiente_id) {
+            $query->where('ambiente_id', $request->ambiente_id);
+        }
+    
+        if ($request->has('inicio_periodo') && $request->inicio_periodo) {
+            $inicio_periodo = \Carbon\Carbon::createFromFormat('Y-m-d', $request->inicio_periodo);
+            $query->where('inicio', '>=', $inicio_periodo);
+        }
+        if ($request->has('fim_periodo') && $request->fim_periodo) {
+            $fim_periodo = \Carbon\Carbon::createFromFormat('Y-m-d', $request->fim_periodo);
+            $query->where('fim', '<=', $fim_periodo);
+        }
+    
+        if ($request->has('professor') && $request->professor) {
+            $query->whereHas('user', function ($query) use ($request) {
+                $query->where('name', 'LIKE', '%' . $request->professor . '%');
+            });
+        }
+    
+        if ($request->has('minhas_reservas')) {
+            $query->where('user_id', Auth::id());
+        }
+    
+        $reservas = $query->get();
+        $ambientes = Ambiente::all();
+        $usuarios = \App\Models\User::all(); 
+    
+        return view('reserva.index', compact('reservas', 'ambientes', 'usuarios'));
     }
+    
+    
 
     // Exibir o formulário de criação de reserva
     public function create()
@@ -39,10 +65,20 @@ class ReservaController extends Controller
             'ambiente_id' => 'required|exists:ambientes,id',
             'equipamentos' => 'array', // Equipamentos são opcionais
             'equipamentos.*' => 'exists:equipamentos,id',
-            'inicio' => 'required|date|after_or_equal:now',
+            'inicio' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    $startOfDay = now()->startOfDay();
+                    if (strtotime($value) < $startOfDay->timestamp) {
+                        $fail('A data de início não pode ser anterior ao início do dia atual.');
+                    }
+                },
+            ],
             'fim' => 'required|date|after:inicio',
             'ocorrencia' => 'nullable|string|max:1000', // Validação da observação
         ]);
+        
 
         // Validação de conflito de reserva
         $conflito = Reserva::where('ambiente_id', $request->ambiente_id)
