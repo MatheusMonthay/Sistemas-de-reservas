@@ -34,6 +34,12 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li>
+                            <form action="{{ route('user.editProfile') }}" method="GET">
+                                @csrf
+                                <button class="dropdown-item" type="submit">Meu perfil</button>
+                            </form>
+                        </li>
+                        <li>
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <button class="dropdown-item" type="submit">Logout</button>

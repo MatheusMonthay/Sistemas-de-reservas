@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OcorrenciaController;
 use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('reservas', ReservaController::class);
 
+    Route::get('/profile', [UserController::class, 'editProfile'])->name('user.editProfile');
+    Route::put('/profile', [UserController::class, 'updateProfile'])->name('user.updateProfile');
 
     Route::get('/ocorrencias', [OcorrenciaController::class, 'index'])->name('ocorrencias.index');
 

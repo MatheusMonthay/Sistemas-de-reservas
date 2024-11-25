@@ -4,11 +4,6 @@
 <div class="container">
     <h3 class="text-center mb-4">Lista de Reservas</h3>
 
-    <!-- Botão para Nova Reserva -->
-    <div class="text-end mb-4">
-        <a href="{{ route('reservas.create') }}" class="btn btn-success">Nova Reserva</a>
-    </div>
-
     <!-- Filtros -->
     <form method="GET" action="{{ route('reservas.index') }}" class="mb-4">
         <div class="row g-3">
@@ -53,10 +48,9 @@
                 </div>
             </div>
         </div>
-        <div class="text-end mt-3">
-            <button type="submit" class="btn btn-primary">Filtrar</button>
-            <a href="{{ route('reservas.index') }}" class="btn btn-secondary">Limpar Filtros</a>
-        </div>
+        <div class="text-end mt-3"> <button type="submit" class="btn btn-primary">Filtrar</button> <a
+                href="{{ route('reservas.index') }}" class="btn btn-secondary">Limpar Filtros</a> <a
+                href="{{ route('reservas.create') }}" class="btn btn-success ms-2">Nova Reserva</a> </div>
     </form>
 
     <!-- Mensagem de sucesso -->
