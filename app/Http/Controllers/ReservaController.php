@@ -13,7 +13,11 @@ class ReservaController extends Controller
     // Exibir todas as reservas
     public function index()
     {
-        $reservas = Reserva::with(['user', 'ambiente', 'equipamentos'])->get();
+        
+        $reservas = Reserva::with(['user', 'ambiente', 'equipamentos'])
+            ->where('inicio', '>=', now()->startOfDay())
+            ->orderBy('inicio', 'asc') 
+            ->get();
         $ambientes = Ambiente::all();
         $equipamentos = Equipamento::all();
     

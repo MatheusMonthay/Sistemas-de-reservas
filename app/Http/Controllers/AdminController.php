@@ -33,14 +33,14 @@ class AdminController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'cpf' => 'required|unique:users,cpf',
-            'password' => 'required|min:8', // Senha obrigatória com mínimo de 8 caracteres
+            'password' => 'required',
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'cpf' => $request->cpf,
-            'password' => Hash::make($request->password), // Usando Hash
+            'password' => $request->password,
             'role' => 'professor',
         ]);
 

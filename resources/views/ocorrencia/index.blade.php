@@ -1,1 +1,1 @@
-TELA DE OcorrenciaController
+@extends('layouts.app')
