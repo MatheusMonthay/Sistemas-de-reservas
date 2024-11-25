@@ -25,7 +25,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/reservas', [ReservaController::class, 'index'])->name('reservas.index');
+    Route::resource('reservas', ReservaController::class);
+
+
     Route::get('/ocorrencias', [OcorrenciaController::class, 'index'])->name('ocorrencias.index');
 
     Route::middleware(['role:admin'])->group(function () {
