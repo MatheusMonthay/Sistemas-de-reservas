@@ -48,9 +48,11 @@
                 </div>
             </div>
         </div>
-        <div class="text-end mt-3"> <button type="submit" class="btn btn-primary">Filtrar</button> <a
-                href="{{ route('reservas.index') }}" class="btn btn-secondary">Limpar Filtros</a> <a
-                href="{{ route('reservas.create') }}" class="btn btn-success ms-2">Nova Reserva</a> </div>
+        <div class="text-end mt-3">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            <a href="{{ route('reservas.index') }}" class="btn btn-secondary">Limpar Filtros</a>
+            <a href="{{ route('reservas.create') }}" class="btn btn-success ms-2">Nova Reserva</a>
+        </div>
     </form>
 
     <!-- Mensagem de sucesso -->
@@ -94,6 +96,7 @@
                 </td>
                 <td>{{ $reserva->ocorrencia ?? 'Nenhuma' }}</td>
                 <td>
+                    @if(\Carbon\Carbon::parse($reserva->inicio)->startOfDay()->greaterThanOrEqualTo(now()->startOfDay()))
                     @if(auth()->user()->role === 'admin' || auth()->user()->id === $reserva->user_id)
                     <a href="{{ route('ocorrencias.create', $reserva->id) }}" class="btn btn-warning btn-sm">Reportar
                         Ocorrência</a>
@@ -104,6 +107,10 @@
                         <button type="submit" class="btn btn-danger btn-sm"
                             onclick="return confirm('Tem certeza que deseja excluir esta reserva?')">Excluir</button>
                     </form>
+                    @endif
+                    @else
+                    <a href="{{ route('ocorrencias.create', $reserva->id) }}" class="btn btn-warning btn-sm">Reportar
+                        Ocorrência</a>
                     @endif
                 </td>
             </tr>

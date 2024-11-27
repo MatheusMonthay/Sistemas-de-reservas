@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Reserva;
 use App\Models\Ambiente;
 use App\Models\Equipamento;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,42 +13,37 @@ class ReservaController extends Controller
 {
     // Exibir todas as reservas
     public function index(Request $request)
-    {
-        $query = Reserva::with(['user', 'ambiente', 'equipamentos'])
-            ->where('inicio', '>=', now()->startOfDay())
-            ->orderBy('inicio', 'asc');
-    
-        // Filtros
-        if ($request->has('ambiente_id') && $request->ambiente_id) {
-            $query->where('ambiente_id', $request->ambiente_id);
-        }
-    
-        if ($request->has('inicio_periodo') && $request->inicio_periodo) {
-            $inicio_periodo = \Carbon\Carbon::createFromFormat('Y-m-d', $request->inicio_periodo);
-            $query->where('inicio', '>=', $inicio_periodo);
-        }
-        if ($request->has('fim_periodo') && $request->fim_periodo) {
-            $fim_periodo = \Carbon\Carbon::createFromFormat('Y-m-d', $request->fim_periodo);
-            $query->where('fim', '<=', $fim_periodo);
-        }
-    
-        if ($request->has('professor') && $request->professor) {
-            $query->whereHas('user', function ($query) use ($request) {
-                $query->where('name', 'LIKE', '%' . $request->professor . '%');
-            });
-        }
-    
-        if ($request->has('minhas_reservas')) {
-            $query->where('user_id', Auth::id());
-        }
-    
-        $reservas = $query->get();
-        $ambientes = Ambiente::all();
-        $usuarios = \App\Models\User::all(); 
-    
-        return view('reserva.index', compact('reservas', 'ambientes', 'usuarios'));
+{
+    $query = Reserva::query();
+
+    if (!$request->hasAny(['inicio_periodo', 'fim_periodo', 'ambiente_id', 'professor', 'minhas_reservas'])) {
+        // Filtra apenas reservas a partir de hoje
+        $query->where('inicio', '>=', now()->startOfDay());
     }
-    
+
+    // Filtros aplicados pelo usuário
+    if ($request->filled('inicio_periodo')) {
+        $query->whereDate('inicio', '>=', $request->input('inicio_periodo'));
+    }
+    if ($request->filled('fim_periodo')) {
+        $query->whereDate('fim', '<=', $request->input('fim_periodo'));
+    }
+    if ($request->filled('ambiente_id')) {
+        $query->where('ambiente_id', $request->input('ambiente_id'));
+    }
+    if ($request->filled('professor')) {
+        $query->where('user_id', $request->input('professor'));
+    }
+    if ($request->filled('minhas_reservas')) {
+        $query->where('user_id', auth()->id());
+    }
+
+    $reservas = $query->with('ambiente', 'user', 'equipamentos')->get();
+    $ambientes = Ambiente::all();
+    $usuarios = User::all();
+
+    return view('reserva.index', compact('reservas', 'ambientes', 'usuarios'));
+}   
     
 
     // Exibir o formulário de criação de reserva
