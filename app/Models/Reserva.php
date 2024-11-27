@@ -30,4 +30,10 @@ class Reserva extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function ocorrencias()
+    {
+        return $this->hasMany(Ocorrencia::class);
+    }
+
 }

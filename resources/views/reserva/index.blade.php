@@ -95,6 +95,8 @@
                 <td>{{ $reserva->ocorrencia ?? 'Nenhuma' }}</td>
                 <td>
                     @if(auth()->user()->role === 'admin' || auth()->user()->id === $reserva->user_id)
+                    <a href="{{ route('ocorrencias.create', $reserva->id) }}" class="btn btn-warning btn-sm">Reportar
+                        Ocorrência</a>
                     <a href="{{ route('reservas.edit', $reserva->id) }}" class="btn btn-warning btn-sm">Editar</a>
                     <form action="{{ route('reservas.destroy', $reserva->id) }}" method="POST" class="d-inline">
                         @csrf

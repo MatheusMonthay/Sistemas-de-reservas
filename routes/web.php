@@ -32,7 +32,12 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [UserController::class, 'updateProfile'])->name('user.updateProfile');
 
     Route::get('/ocorrencias', [OcorrenciaController::class, 'index'])->name('ocorrencias.index');
-
+    Route::get('/ocorrencias/create/{reservaId}', [OcorrenciaController::class, 'create'])->name('ocorrencias.create');
+    Route::post('/ocorrencias/{reservaId}', [OcorrenciaController::class, 'store'])->name('ocorrencias.store');
+    Route::get('/ocorrencias/{id}/edit', [OcorrenciaController::class, 'edit'])->name('ocorrencias.edit');
+    Route::put('/ocorrencias/{id}', [OcorrenciaController::class, 'update'])->name('ocorrencias.update');
+    Route::delete('/ocorrencias/{id}', [OcorrenciaController::class, 'destroy'])->name('ocorrencias.destroy');
+        
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 
