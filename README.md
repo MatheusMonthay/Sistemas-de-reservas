@@ -20,50 +20,36 @@ O projeto inclui as seguintes funcionalidades:
 Para rodar este projeto em sua máquina local, siga os seguintes passos:
 
 ### 1. Clone o repositório
-\`\`\`bash
-git clone git@github.com:MatheusMonthay/Sistemas-de-reservas.git
-\`\`\`
+```git clone git@github.com:MatheusMonthay/Sistemas-de-reservas.git```
 
 ### 2. Acesse o diretório do projeto
-\`\`\`bash
-cd sistema-de-reservas
-\`\`\`
+```cd sistema-de-reservas```
 
 ### 3. Instale as dependências do Composer
-\`\`\`bash
-composer install
-\`\`\`
+```composer install```
 
 ### 4. Configure o arquivo \`.env\`
 Copie o arquivo \`.env.example\` e renomeie-o para \`.env\`.
-\`\`\`bash
-cp .env.example .env
-\`\`\`
+```cp .env.example .env```
 
-Atualize as configurações do banco de dados no arquivo \`.env\`:
-\`\`\`dotenv
+Atualize as configurações do banco de dados no arquivo `.env\`:
+```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=nome_do_banco
 DB_USERNAME=usuario
 DB_PASSWORD=senha
-\`\`\`
+```
 
 ### 5. Gere a chave de aplicativo
-\`\`\`bash
-php artisan key:generate
-\`\`\`
+```php artisan key:generate```
 
 ### 6. Execute as migrações do banco de dados
-\`\`\`bash
-php artisan migrate
-\`\`\`
+```php artisan migrate```
 
 ### 7. Inicie o servidor embutido do Laravel
-\`\`\`bash
-php artisan serve
-\`\`\`
+```php artisan serve```
 
 Acesse a aplicação em: \`http://localhost:8000\`
 
@@ -79,26 +65,16 @@ Sinta-se à vontade para contribuir com este projeto! Se você deseja colaborar,
 
 1. Fork este repositório.
 2. Crie uma branch com a sua feature:
-\`\`\`bash
-git checkout -b minha-feature
-\`\`\`
+```git checkout -b minha-feature```
 3. Commit suas alterações:
-\`\`\`bash
-git commit -m \"Adicionei uma nova feature\"
-\`\`\`
+```git commit -m \"Adicionei uma nova feature\"```
 4. Envie para o repositório remoto:
-\`\`\`bash
-git push origin minha-feature
-\`\`\`
+```git push origin minha-feature```
 5. Crie um pull request.
 
 
 ## Autores
-Matheus Monthay Almeida
-Jefferson 
-Leonardo Henrique
-Marcos Eduardo
-Willianes
+Matheus Monthay Almeida, Jefferson, Leonardo Henrique, Marcos Eduardo e Willianes
 
 ## Agradecimentos
 Agradecemos ao professor Itamar Alves e aos colegas que contribuíram com ideias e feedback para o desenvolvimento deste projeto." 
