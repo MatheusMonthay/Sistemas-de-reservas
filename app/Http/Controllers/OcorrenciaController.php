@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ocorrencia;
+use App\Models\Reserva;
 use Illuminate\Http\Request;
 
 class OcorrenciaController extends Controller
@@ -17,6 +18,28 @@ class OcorrenciaController extends Controller
         return view('ocorrencia.index', compact('ocorrencias'));
     }
 
+    public function create($reservaId)
+    {
+        $reserva = Reserva::findOrFail($reservaId);
+        return view('ocorrencia.create', compact('reserva'));
+    }
+
+    public function store(Request $request, $reservaId)
+    {
+        $request->validate([
+            'descricao' => 'required|string|max:1000',
+        ]);
+
+        Ocorrencia::create([
+            'reserva_id' => $reservaId,
+            'user_id' => auth()->id(),
+            'descricao' => $request->descricao,
+            'status' => 'pendente',
+        ]);
+
+        return redirect()->route('ocorrencias.index')->with('success', 'Ocorrência reportada com sucesso!');
+    }
+    
     public function edit($id)
     {
         $ocorrencia = Ocorrencia::findOrFail($id);

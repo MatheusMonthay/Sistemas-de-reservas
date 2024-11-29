@@ -133,7 +133,16 @@ class ReservaController extends Controller
             'ambiente_id' => 'required|exists:ambientes,id',
             'equipamentos' => 'array', // Equipamentos são opcionais
             'equipamentos.*' => 'exists:equipamentos,id',
-            'inicio' => 'required|date|after_or_equal:now',
+            'inicio' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    $startOfDay = now()->startOfDay();
+                    if (strtotime($value) < $startOfDay->timestamp) {
+                        $fail('A data de início não pode ser anterior ao início do dia atual.');
+                    }
+                },
+            ],
             'fim' => 'required|date|after:inicio',
             'ocorrencia' => 'nullable|string|max:1000', // Validação da observação
         ]);

@@ -47,76 +47,96 @@
                 rows="3">{{ old('ocorrencia', $reserva->ocorrencia) }}</textarea>
         </div>
 
-        <div class="mb-3">
-            <label for="equipamentos" class="form-label">Equipamentos</label>
-            <div id="equipamentos-container">
-                @foreach($equipamentos as $equipamento)
-                <div class="d-flex align-items-center mb-2">
-                    <select name="equipamentos[]" class="form-select me-2" style="width: 300px;">
-                        <option value="{{ $equipamento->id }}" @if($reserva->
-                            equipamentos->pluck('id')->contains($equipamento->id)) selected @endif>
-                            {{ $equipamento->nome }}
-                        </option>
-                    </select>
-                    <button type="button" class="btn btn-outline-danger btn-sm ms-2"
-                        onclick="removeEquipamentoField(this)">X</button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm ms-2"
-                        onclick="addEquipamentoField()">+</button>
-                </div>
-                @endforeach
+        <div id="equipamentos-container" class="mb-4">
+            <label class="form-label">Equipamentos</label>
+            @foreach($reserva->equipamentos as $equipamentoSelecionado)
+            <div class="equipamento-field d-flex align-items-center mb-2">
+                <select name="equipamentos[]" class="form-select me-2" required>
+                    <option value="">Selecione um equipamento</option>
+                    @foreach($equipamentos as $equipamento)
+                    <option value="{{ $equipamento->id }}" @if($equipamentoSelecionado->id == $equipamento->id) selected
+                        @endif>
+                        {{ $equipamento->nome }}
+                    </option>
+                    @endforeach
+                </select>
+                <button type="button" class="btn btn-outline-danger btn-sm ms-2"
+                    onclick="removeEquipamento(this)">X</button>
+            </div>
+            @endforeach
+
+            <!-- Campo para adicionar novos equipamentos -->
+            <div class="equipamento-field d-flex align-items-center mb-2">
+                <select name="equipamentos[]" class="form-select me-2" required>
+                    <option value="">Selecione um equipamento</option>
+                    @foreach($equipamentos as $equipamento)
+                    <option value="{{ $equipamento->id }}">{{ $equipamento->nome }}</option>
+                    @endforeach
+                </select>
+                <button type="button" class="btn btn-outline-success btn-sm" onclick="addEquipamento()">+</button>
             </div>
         </div>
 
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-            <a href="{{ route('reservas.index') }}" class="btn btn-secondary">Cancelar</a>
-        </div>
+        <button type="submit" class="btn btn-primary w-100 mb-2">Salvar</button>
+        <a href="{{ route('reservas.index') }}" class="btn btn-secondary w-100">Voltar</a>
     </form>
 </div>
 
 <script>
-function addEquipamentoField() {
+document.addEventListener('DOMContentLoaded', () => {
+    // Populate the first select with existing options if needed
+    const selects = document.querySelectorAll('select[name="equipamentos[]"]');
+    selects.forEach(select => populateEquipamentoOptions(select));
+});
+
+function populateEquipamentoOptions(select) {
+    const equipamentos = @json($equipamentos);
+    const currentValue = select.value;
+
+    select.innerHTML = '<option value="">Selecione um equipamento</option>';
+    equipamentos.forEach(equipamento => {
+        const option = document.createElement('option');
+        option.value = equipamento.id;
+        option.textContent = equipamento.nome;
+        if (currentValue == equipamento.id) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+}
+
+function addEquipamento() {
     const container = document.getElementById('equipamentos-container');
     const newField = document.createElement('div');
-    newField.classList.add('d-flex', 'align-items-center', 'mb-2');
+    newField.classList.add('equipamento-field', 'd-flex', 'align-items-center', 'mb-2');
 
     const select = document.createElement('select');
     select.name = 'equipamentos[]';
     select.classList.add('form-select', 'me-2');
-    select.style.width = '300px';
+    select.required = true;
 
-    @foreach($equipamentos as $equipamento)
-    const option = document.createElement('option');
-    option.value = '{{ $equipamento->id }}';
-    option.textContent = '{{ $equipamento->nome }}';
-    select.appendChild(option);
-    @endforeach
+    populateEquipamentoOptions(select);
 
-    const buttonRemove = document.createElement('button');
-    buttonRemove.type = 'button';
-    buttonRemove.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'ms-2');
-    buttonRemove.textContent = 'X';
-    buttonRemove.onclick = function() {
-        removeEquipamentoField(buttonRemove);
-    };
-
-    const buttonAdd = document.createElement('button');
-    buttonAdd.type = 'button';
-    buttonAdd.classList.add('btn', 'btn-outline-secondary', 'btn-sm', 'ms-2');
-    buttonAdd.textContent = '+';
-    buttonAdd.onclick = function() {
-        addEquipamentoField();
+    const removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.classList.add('btn', 'btn-outline-danger', 'btn-sm', 'ms-2');
+    removeButton.textContent = 'X';
+    removeButton.onclick = function() {
+        removeEquipamento(newField);
     };
 
     newField.appendChild(select);
-    newField.appendChild(buttonRemove);
-    newField.appendChild(buttonAdd);
+    newField.appendChild(removeButton);
     container.appendChild(newField);
 }
 
-function removeEquipamentoField(button) {
+function removeEquipamento(field) {
     const container = document.getElementById('equipamentos-container');
-    container.removeChild(button.parentNode);
+    if (container.children.length > 1) {
+        container.removeChild(field);
+    } else {
+        alert('Você deve manter pelo menos um equipamento.');
+    }
 }
 </script>
 @endsection

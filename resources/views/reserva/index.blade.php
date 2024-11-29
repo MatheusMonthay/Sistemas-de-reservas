@@ -98,15 +98,15 @@
                 <td>
                     @if(\Carbon\Carbon::parse($reserva->inicio)->startOfDay()->greaterThanOrEqualTo(now()->startOfDay()))
                     @if(auth()->user()->role === 'admin' || auth()->user()->id === $reserva->user_id)
-                    <a href="{{ route('ocorrencias.create', $reserva->id) }}" class="btn btn-warning btn-sm">Reportar
-                        Ocorrência</a>
-                    <a href="{{ route('reservas.edit', $reserva->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                    <form action="{{ route('reservas.destroy', $reserva->id) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm"
-                            onclick="return confirm('Tem certeza que deseja excluir esta reserva?')">Excluir</button>
-                    </form>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('reservas.edit', $reserva->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                        <form action="{{ route('reservas.destroy', $reserva->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Tem certeza que deseja excluir esta reserva?')">Excluir</button>
+                        </form>
+                    </div>
                     @endif
                     @else
                     <a href="{{ route('ocorrencias.create', $reserva->id) }}" class="btn btn-warning btn-sm">Reportar

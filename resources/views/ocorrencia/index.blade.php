@@ -10,7 +10,6 @@
     </div>
     @endif
 
-    @if(auth()->user()->role === 'admin' || auth()->user()->id === $reserva->user_id)
     @if($ocorrencias->isEmpty())
     <div class="alert alert-warning text-center">
         Nenhuma ocorrência registrada.
@@ -31,6 +30,7 @@
         </thead>
         <tbody>
             @foreach($ocorrencias as $ocorrencia)
+            @if(auth()->user()->role === 'admin' || $ocorrencia->user_id === auth()->user()->id)
             <tr
                 class="{{ $ocorrencia->status === 'resolvida' ? 'bg-success' : ($ocorrencia->status === 'pendente' ? 'bg-warning' : 'bg-info') }}">
                 <td>{{ $ocorrencia->reserva->ambiente->nome }}</td>
@@ -44,14 +44,10 @@
                 </td>
                 @endif
             </tr>
+            @endif
             @endforeach
         </tbody>
     </table>
-    @endif
-    @else
-    <div class="alert alert-danger text-center">
-        Você não tem permissão para visualizar estas ocorrências.
-    </div>
     @endif
 </div>
 @endsection
